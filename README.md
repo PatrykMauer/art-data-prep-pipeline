@@ -1,26 +1,30 @@
 
 # Data Processing Pipeline Instructions
 
-This document outlines the steps for activating the virtual environment and processing data in the project.
+This document outlines the steps for running the data processing pipeline.
 
+## Clone the project
+```
+https://github.com/PatrykMauer/art-data-prep-pipeline.git
+```    
+
+## Run the pipeline with docker
+```
+docker build -t art-data-prep-pipeline .
+```
+Change 'results_2024_05_11' to reflect your filename. For the time being only .xlsx is supported.
+```
+docker run -it --rm -v .:/app -w /app art-data-prep-pipeline /bin/bash ./data_processing.sh results_2024_05_11.xlsx
+```
+
+# Local steps
+
+If you prefer not to use docker, follow the steps below.
 ## Activating Virtual Environment
 
 For Windows users, activate the local virtual environment by running the following command in the root folder:
 ```bash
 .\.venv\Scripts\activate
-```
-
-## With docker
-```
-docker build -t art-data-prep-pipeline .
-```
-
-```
-./data_processing.sh results_2024_05_11.xlsx
-```
-
-```
-chmod +x data_processing.sh
 ```
 
 ## Processing Data
