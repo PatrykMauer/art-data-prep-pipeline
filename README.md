@@ -11,9 +11,16 @@ For Windows users, activate the local virtual environment by running the followi
 ```
 
 ## With docker
-
 ```
 docker build -t art-data-prep-pipeline .
+```
+
+```
+./data_processing.sh results_2024_05_11.xlsx
+```
+
+```
+chmod +x data_processing.sh
 ```
 
 ## Processing Data
@@ -24,7 +31,7 @@ Follow these steps in sequence to process your data:
 
 Run the following command to process the raw data:
 ```bash
-python src\data\process_data.py  data\raw\results_2024_03_04.xlsx data\interim\results_2024_05_11.xlsx
+python src\data\process_data.py  data\raw\results_2024_05_11.xlsx data\interim\results_2024_05_11.xlsx
 ```
 
 ### 2. Filter Data

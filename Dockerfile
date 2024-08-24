@@ -13,5 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container at /app
 COPY . /app/
 
+# Change permissions to make the script executable
+RUN chmod +x data_processing.sh
+
 # Define environment variable
 ENV PYTHONUNBUFFERED=1

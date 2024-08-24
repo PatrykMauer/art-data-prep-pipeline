@@ -1,10 +1,6 @@
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, MinMaxScaler
-from sklearn.preprocessing import LabelEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.feature_extraction import FeatureHasher
+from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 import pandas as pd
 import argparse
-# pylint: disable=E0401
 import columns_structure
 
 
@@ -16,25 +12,9 @@ def encode_data(input_file, output_file):
 
     df = df[columns_structure.columns_to_select]
 
-    # Artist - HashEncoder
-    data_for_hashing = [{'artist': artist} for artist in df['ARTIST']]
-    N_FEATURES = 6
-
-    hasher = FeatureHasher(n_features=N_FEATURES, input_type='dict')
-    hashed_features = hasher.transform(data_for_hashing)
-    hashed_features_df = pd.DataFrame(hashed_features.toarray())
-
-    new_columns = [f'artist_hashed_{i}' for i in range(
-        hashed_features_df.shape[1])]
-    hashed_features_df.columns = new_columns
-
-    if 'ARTIST' in df.columns:
-        df = df.drop('ARTIST', axis=1)
-
-    hashed_features_df = hashed_features_df.reset_index(drop=True)
-    df = df.reset_index(drop=True)
-    df = pd.concat([hashed_features_df, df], axis=1)
-    df.head()
+    # Artist - OrdinalEncoder
+    ordinal_encoder = OrdinalEncoder()
+    df['ARTIST'] = ordinal_encoder.fit_transform(df[['ARTIST']])
 
     # Technique - OrdinalEncoder - map first three to 0, and the rest to following numbers
     ordinal_encoder = OrdinalEncoder(
@@ -56,9 +36,9 @@ def encode_data(input_file, output_file):
         df['PRICE'].replace(',', '', regex=True),
         errors='coerce')
 
-    # Convert all columns to numeric except 'AUCTION DATE' and 'URL'
-    df[df.columns.difference(['AUCTION DATE', 'URL'])] = df[df.columns.difference(
-        ['AUCTION DATE', 'URL'])].apply(pd.to_numeric, errors='coerce')
+    # Convert all columns to numeric except 'AUCTION DATE', 'URL', 'ImageName'
+    df[df.columns.difference(['AUCTION DATE', 'URL', 'ImageName'])] = df[df.columns.difference(
+        ['AUCTION DATE', 'URL', 'ImageName'])].apply(pd.to_numeric, errors='coerce')
 
     df.to_excel(output_file, index=False)
 
