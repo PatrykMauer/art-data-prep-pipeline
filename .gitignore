@@ -87,10 +87,8 @@ target/
 .mypy_cache/
 
 # data
-.xlsx
-.csv
-
-TODO.txt
+*.xlsx
+*.csv
 
 #venv
 .venv

@@ -1,0 +1,16 @@
+# Ignore all CSV files
+*.csv
+*.xlsx
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+.venv/
+
+# Ignore Git directory
+.git/
+
+# Ignore vscode
+.vscode/

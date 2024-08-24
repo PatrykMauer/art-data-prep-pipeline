@@ -10,6 +10,12 @@ For Windows users, activate the local virtual environment by running the followi
 .\.venv\Scripts\activate
 ```
 
+## With docker
+
+```
+docker build -t art-data-prep-pipeline .
+```
+
 ## Processing Data
 
 Follow these steps in sequence to process your data:
