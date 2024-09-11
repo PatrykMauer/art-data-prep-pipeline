@@ -1,3 +1,6 @@
+# Dataset
+Mauer, Patryk, 2024, "Art auction result of prints", https://doi.org/10.18150/AEQF8C, RepOD, V1
+
 
 # Data Processing Pipeline Instructions
 
