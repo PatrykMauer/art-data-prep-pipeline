@@ -126,9 +126,7 @@ def process_data(input_file, output_file):
     df = pd.read_excel(input_file)
     df = remove_columns(df, columns_structure.columns_to_remove)
 
-    df['AUCTION DATE'] = pd.to_datetime(
-        df['AUCTION DATE'],
-        format='%d-%m-%Y', errors='coerce')
+    df['AUCTION DATE'] = pd.to_datetime(df['AUCTION DATE'], errors='coerce')
 
     df = df.dropna(subset=['AUCTION DATE'])
     print(df['AUCTION DATE'].dtype)
@@ -205,20 +203,28 @@ def process_data(input_file, output_file):
     df.dropna(subset=['PRICE'], inplace=True)
 
     # Tenth Column Preprocessing (Year)
+    # Handle missing values in the YEAR column
     mask = (df['YEAR'] == "") | df['YEAR'].isna()
     extracted_data = df.loc[mask, 'PERIOD']
     df.loc[mask, 'YEAR'] = extracted_data.apply(retrieve_year)
 
-    # Ensure the column contains only four numbers
+    # Convert the 'YEAR' column to string to avoid issues with .str accessor
+    df['YEAR'] = df['YEAR'].astype(str)
+
+    # Ensure the column contains only four numbers using regex
     matches = df['YEAR'].str.contains(metrics.REGEX_YEAR, na=False)
+
+    # Extract the valid years using the regex pattern
     df.loc[matches, 'YEAR'] = df.loc[matches, 'YEAR'].str.extract(
         metrics.REGEX_YEAR, expand=False)
 
-    # Remove rows where year could not be resolved
+    # Remove rows where the year could not be resolved (NaN or empty)
     df = df[pd.notna(df['YEAR']) & (df['YEAR'] != '')]
 
-    # Apply the function to the 'YEAR' column
+    # Convert the 'YEAR' column back to integers (or NaN for invalid values)
     df['YEAR'] = df['YEAR'].apply(convert_to_int_or_nan)
+
+    # Drop any remaining rows where the year is missing or invalid
     df.dropna(subset=['YEAR'], inplace=True)
 
     # Drop columns used for retrievel of missing information
